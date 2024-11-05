@@ -1,0 +1,29 @@
+[build-system]
+requires = [
+    "setuptools>=61.0"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ip_lookup"
+version = "1.0"
+authors = [
+    {   name="Yaroslav Bondarenko", email="braonle@yandex.ru"   }
+]
+description = "Translate IPs from list in text file or CSE SSL spreadsheet"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "openpyxl==3.1.2",
+    "ipwhois==1.2.0",
+    "pandas==2.2.2",
+    "xlsxwriter==3.2.0"
+]
+
+[project.urls]
+# Homepage =
+# Issues =
