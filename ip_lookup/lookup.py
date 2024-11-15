@@ -141,7 +141,9 @@ class RirSearcher:
                              TIMEOUT_SLEEP)
                 retry_count += 1
                 time.sleep(TIMEOUT_SLEEP)
-            except (ipwhois.exceptions.HTTPLookupError, ipwhois.exceptions.WhoisLookupError) as e:
+            except (ipwhois.exceptions.HTTPLookupError, ipwhois.exceptions.WhoisLookupError,
+                    ipwhois.exceptions.ASNParseError) as e:
+                logging.warning("Lookup failed for %s with exception %s", address, str(e))
                 # response = {}
                 break
 
@@ -244,7 +246,7 @@ class RirSearcher:
 
     def search_excel(self, excel: str, sheet_list: list[str]) -> None:
         """
-            Search SSL inspection spreadsheet for IPs and resolve them
+            Search CSE SSL spreadsheet for IPs and resolve them
 
             :param str excel: path to CSE SSL spreadsheet
             :param list[str] sheet_list: worksheet names to search through
@@ -257,9 +259,12 @@ class RirSearcher:
 
         wb: openpyxl.Workbook = openpyxl.load_workbook(filename=excel)
 
+        logging.info("Building lookup set from spreadsheets")
         for sheet in sheet_list:
             ws = wb[sheet]
             entries_start_row: int = -1
+
+            logging.info("Processing sheet %s", sheet)
 
             # Find the row that is used as the row for first entries in lists
             for row in range(1, EXCEL_ENTRIES_MAX_SEARCH):
