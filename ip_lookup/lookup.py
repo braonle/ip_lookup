@@ -167,7 +167,8 @@ class RirSearcher:
         net_rdns_fqdn: str = ""
 
         host_and_mask = address.split("/")
-        if len(host_and_mask) == 1 or int(host_and_mask[1]) == 32:
+
+        if len(host_and_mask) == 1 or host_and_mask[1].isnumeric() and 32 == int(host_and_mask[1]):
             try:
                 net_rdns_fqdn = socket.gethostbyaddr(host_and_mask[0])[0]
             except socket.herror:
