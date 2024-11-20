@@ -83,7 +83,7 @@ class ResolvedNetwork:
         """
             Convert object to dict/JSON
         """
-        return self.__dict__
+        return self.__dict__.copy()
 
     def __str__(self) -> str:
         """
