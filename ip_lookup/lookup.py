@@ -10,7 +10,7 @@ import re
 from enum import Enum
 
 import pandas
-import ipwhois
+import ipwhois, ipwhois.utils
 import openpyxl
 import openpyxl.styles as xlstyle
 
@@ -103,6 +103,12 @@ class RirSearcher:
             return None, ResolvedNetwork(address=address,
                                          description=Descriptions.RSVD_IP_DESCR.value)
 
+        is_defined = ipwhois.utils.ipv4_is_defined(host_addr)
+        if is_defined[0]:
+            return None, ResolvedNetwork(address=address,
+                                         description='IPv4 address {0} is already defined as {1} via {2}.'.format(
+                                                host_addr, is_defined[1], is_defined[2])
+                                         )
         return ip, None
 
     def single_lookup(self, address: str, persist: bool = True)\
