@@ -139,7 +139,7 @@ class RirSearcher:
         response: dict = {}
         while retry_count < RETRY_COUNT_MAX:
             try:
-                response = whois.lookup_whois()
+                response = whois.lookup_rdap()
                 break
             except TimeoutError:
                 # wait a few moments before trying again
@@ -158,18 +158,11 @@ class RirSearcher:
             return False, False, True, None
 
         # Build description and append to output list
-        if len(response["nets"]) > 0:
-            net_cidr: str = str(response["nets"][0]["cidr"]).replace("\n", " ")
-            net_name: str = str(response["nets"][0]["name"]).replace("\n", " ")
-            net_description: str = str(response["nets"][0]["description"]).replace("\n", " ")
-            net_country: str = str(response["nets"][0]["country"]).replace("\n", " ")
-        else:
-            net_cidr: str = str(response["asn_cidr"]).replace("\n", " ")
-            net_name: str = ""
-            net_description: str = str(response["asn_description"]).replace("\n", " ")
-            net_country: str = str(response["asn_country_code"]).replace("\n", " ")
-
-        net_registry: str = str(response["asn_registry"]).replace("\n", " ")
+        net_cidr: str = response["asn_cidr"]
+        net_name: str = response["network"]["name"]
+        net_description: str = response["asn_description"]
+        net_country: str = response["asn_country_code"]
+        net_registry: str = response["asn_registry"]
         net_rdns_fqdn: str = ""
 
         host_and_mask = address.split("/")
