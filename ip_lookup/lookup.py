@@ -183,7 +183,10 @@ class RirSearcher:
             # Get subnets for the aggregate – either 'asn_cidr' or 'nets':first_net:'cidr'
             subnets = [response.get('asn_cidr', None)]
             if subnets[0] in [None, "NA"]:
-                subnets = response['nets'][0]['cidr'].replace(" ", "").split(",")
+                if response.get("nets"):
+                    subnets = response['nets'][0]['cidr'].replace(" ", "").split(",")
+                else:
+                    subnets = response['network']['cidr'].replace(" ", "").split(",")
 
             # Add to cache for subnet in response
             for net in subnets:
